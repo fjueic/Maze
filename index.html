@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="style.css" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="contorls-container">
+            <h1>The Maze Game</h1>
+            <div class="controls">
+                <button id="new">New Maze</button>
+                <button id="path" disabled>Show Path</button>
+                <button id="hide" disabled>Hide Path</button>
+                <div class="animate">
+                    <input type="checkbox" id="tick" />
+                    <label for="tick">Animate</label>
+                </div>
+                <!-- integer input -->
+                <div class="size">
+                    <input
+                        type="number"
+                        id="mazeSize"
+                        value="15"
+                        min="2"
+                        max="100"
+                    />
+                    <label for="mazeSize">Dimension of Maze</label>
+                </div>
+            </div>
+        </div>
+        <canvas id="canvas"></canvas>
+        <script src="script.js"></script>
+    </body>
+</html>
