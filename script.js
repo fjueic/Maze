@@ -429,38 +429,31 @@ function checkIfSolved(start, end) {
 document.addEventListener("keydown", (e) => {
     if (pathVisible) return;
     start.current = true;
-    if (e.key == "ArrowUp") {
+    if (e.key == "ArrowUp" || e.key == "w") {
         if (start.y > 0 && !cells[start.x][start.y].borders[0]) {
             start.current = false;
             start = cells[start.x][start.y - 1];
-            start.current = true;
-            drawCanvas(cells, mazeSize);
         }
     }
-    if (e.key == "ArrowRight") {
+    if (e.key == "ArrowRight" || e.key == "d") {
         if (start.x < mazeSize - 1 && !cells[start.x][start.y].borders[1]) {
             start.current = false;
             start = cells[start.x + 1][start.y];
-            start.current = true;
-            drawCanvas(cells, mazeSize);
         }
     }
-    if (e.key == "ArrowDown") {
+    if (e.key == "ArrowDown" || e.key == "s") {
         if (start.y < mazeSize - 1 && !cells[start.x][start.y].borders[2]) {
             start.current = false;
             start = cells[start.x][start.y + 1];
-            start.current = true;
-            drawCanvas(cells, mazeSize);
         }
     }
-    if (e.key == "ArrowLeft") {
+    if (e.key == "ArrowLeft" || e.key == "a") {
         if (start.x > 0 && !cells[start.x][start.y].borders[3]) {
             start.current = false;
             start = cells[start.x - 1][start.y];
-            start.current = true;
-            drawCanvas(cells, mazeSize);
         }
     }
+    start.current = true;
     drawCanvas(cells, mazeSize);
     if (checkIfSolved(start, end)) {
         alert("You solved the maze!");
