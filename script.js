@@ -1,5 +1,9 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+const time_Taken = document.getElementById("time-taken");
+function updateTime(t) {
+    time_Taken.innerHTML = t + "ms";
+}
 function setCanvasSize() {
     canvas.width = Math.min(window.innerWidth, window.innerHeight) - 20;
     canvas.height = canvas.width;
@@ -113,13 +117,13 @@ class Cell {
 }
 
 class CreatMaze {
-    constructor(cells, mazeSize, animate = false) {
+    constructor(cells, mazeSize, animate = false, i = 0, j = 0) {
         this.cells = cells;
         this.mazeSize = mazeSize;
         this.animate = animate;
         this.stack = [];
         this.lastVisited = null;
-        this.currentCell = cells[0][0];
+        this.currentCell = cells[i][j];
         this.currentCell.visited = true;
         this.stack.push(this.currentCell);
         this.done = false;
@@ -176,6 +180,20 @@ class CreatMaze {
             this.currentCell = this.stack.pop();
         } else {
             this.done = true;
+        }
+    }
+
+    randomlyRemoveWalls() {
+        for (let i = 1; i < this.mazeSize - 1; i++) {
+            for (let j = 1; j < this.mazeSize - 1; j++) {
+                let cell = this.cells[i][j];
+                let neighbors = [this.cells[i][j - 1], this.cells[i][j + 1] , this.cells[i - 1][j], this.cells[i + 1][j]];
+                let nextCell =
+                    neighbors[Math.floor(Math.rNandom() * neighbors.length)];
+                if (Math.random(0, 1) > 0.9) {
+                    cell.connect(nextCell);
+                }
+            }
         }
     }
     run() {
@@ -347,6 +365,9 @@ let animating = animate.checked;
 const newMazeButton = document.getElementById("new");
 const showPathButton = document.getElementById("path");
 const hidePathButton = document.getElementById("hide");
+const i_indx = document.getElementById("i-index");
+const j_indx = document.getElementById("j-index");
+
 let cells = newCells(mazeSize);
 let pathVisible = false;
 let start = cells[0][0];
@@ -354,6 +375,24 @@ start.current = true;
 start.visited = true;
 drawCanvas(cells, mazeSize);
 let end = cells[mazeSize - 1][mazeSize - 1];
+
+i_indx.addEventListener("change", () => {
+    start.current = false;
+    start.visited = false;
+    start = cells[i_indx.value][j_indx.value];
+    start.current = true;
+    start.visited = true;
+    drawCanvas(cells, mazeSize);
+});
+
+j_indx.addEventListener("change", () => {
+    start.current = false;
+    start.visited = false;
+    start = cells[i_indx.value][j_indx.value];
+    start.current = true;
+    start.visited = true;
+    drawCanvas(cells, mazeSize);
+});
 
 hidePathButton.addEventListener("click", () => {
     hidePathButton.disabled = true;
@@ -371,7 +410,9 @@ showPathButton.addEventListener("click", () => {
     newMazeButton.disabled = true;
     showPathButton.disabled = true;
     let maze = new SolveMaze(cells, mazeSize, start, animating);
+    let t = new Date();
     maze.run().then(() => {
+        updateTime(new Date() - t);
         hidePathButton.disabled = false;
         size.disabled = false;
         animate.disabled = false;
@@ -390,19 +431,29 @@ newMazeButton.addEventListener("click", () => {
     showPathButton.disabled = true;
     cells = newCells(mazeSize);
     drawCanvas(cells, mazeSize);
-    let maze = new CreatMaze(cells, mazeSize, animating);
+    let maze = new CreatMaze(
+        cells,
+        mazeSize,
+        animating,
+        i_indx.value,
+        j_indx.value
+    );
+    let t = new Date();
     maze.run().then(() => {
+        updateTime(new Date() - t);
         cells = maze.cells;
         hidePathButton.disabled = false;
         pathVisible = false;
         clearMaze(cells, mazeSize);
-        start = cells[0][0];
+        start = cells[i_indx.value][j_indx.value];
         start.current = true;
         drawCanvas(cells, mazeSize);
         size.disabled = false;
         animate.disabled = false;
         newMazeButton.disabled = false;
         showPathButton.disabled = false;
+        maze.randomlyRemoveWalls();
+        drawCanvas(cells, mazeSize);
     });
 });
 
