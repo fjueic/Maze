@@ -1,4 +1,4 @@
-# Maze Solver Project Report
+# [Maze Solver](https://fjueic.github.io/Maze/) Project Report
 
 ## Introduction
 The Maze Solver project is a web application that generates and solves mazes using a combination of maze generation algorithms and maze-solving algorithms. The project is implemented in JavaScript and utilizes the HTML5 Canvas element for visualization. The primary goal is to create a maze, visualize the process, and then solve it using a pathfinding algorithm.
